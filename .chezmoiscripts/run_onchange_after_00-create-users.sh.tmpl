@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+{{ if eq .chezmoi.osRelease.id "fedora" -}}
+set -euo pipefail
+
+echo "==> Verificando e criando usuários do sistema..."
+{{- range .user }}
+  {{- $matchesHost := or (not (hasKey . "host")) (eq .host $.chezmoi.hostname) }}
+
+  {{- if $matchesHost }}
+if id "{{ .name }}" &>/dev/null; then
+    echo "Usuário '{{ .name }}' já existe. Atualizando configurações..."
+    sudo usermod -s "{{ .shell }}" "{{ .name }}"
+    {{- if hasKey . "groups" }}
+    sudo usermod -aG "{{ .groups }}" "{{ .name }}"
+    {{- end }}
+else
+    echo "Criando usuário '{{ .name }}'..."
+    sudo useradd -m -s "{{ .shell }}" \
+      {{- if hasKey . "groups" }}
+      -G "{{ .groups }}" \
+      {{- end }}
+      "{{ .name }}"
+fi
+  {{- end }}
+{{- end }}
+
+echo "==> Configuração de usuários concluída!"
+{{ end -}}
