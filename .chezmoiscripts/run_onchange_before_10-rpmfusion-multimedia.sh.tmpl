@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+{{ if eq .chezmoi.osRelease.id "fedora" -}}
+set -euo pipefail
+
+FEDORA_VERSION="{{ .chezmoi.osRelease.versionID }}"
+
+echo "==> Removendo repositórios não utilizados..."
+sudo rm -f \
+    /etc/yum.repos.d/rpmfusion-nonfree-nvidia-driver.repo \
+    /etc/yum.repos.d/rpmfusion-nonfree-steam.repo
+
+echo "==> Instalando repositórios RPM Fusion..."
+sudo dnf install -y --nogpgcheck \
+    "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-${FEDORA_VERSION}.noarch.rpm" \
+    "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${FEDORA_VERSION}.noarch.rpm"
+
+echo "==> Instalando grupo de pacotes Multimídia..."
+sudo dnf groupinstall -y --setopt=install_weak_deps=False \
+    --exclude="PackageKit-gstreamer-plugin" \
+    "Multimedia"
+
+if rpm -q ffmpeg-free &>/dev/null; then
+    echo "==> Substituindo ffmpeg-free pelo ffmpeg completo via swap..."
+    sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing
+else
+    echo "==> ffmpeg-free não encontrado. Instalando ffmpeg..."
+    sudo dnf install -y ffmpeg
+fi
+
+echo "==> Configuração multimídia concluída com sucesso!"
+{{ end -}}

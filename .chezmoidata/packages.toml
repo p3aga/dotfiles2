@@ -26,6 +26,7 @@ install = [
   "gnome-themes-extra",
   "gnome-tweaks",
   "htop",
+  "intel-media-driver",
   "libvirt",
   "mise",
   "nodejs",
