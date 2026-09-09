@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+{{ if eq .chezmoi.osRelease.id "fedora" -}}
+set -euo pipefail
+
+TARGET_FILE="/etc/libvirt/network.conf"
+
+if [ -f "$TARGET_FILE" ]; then
+    if grep -qE '^[[:space:]]*#[[:space:]]*firewall_backend[[:space:]]*=[[:space:]]*"nftables"' "$TARGET_FILE"; then
+        echo "==> Descomentando firewall_backend em $TARGET_FILE..."
+        sudo sed -i -E 's/^[[:space:]]*#[[:space:]]*(firewall_backend[[:space:]]*=[[:space:]]*"nftables")/\1/' "$TARGET_FILE"
+
+        # Reinicia o serviço libvirtd para aplicar a alteração se estiver ativo
+        if systemctl is-active --quiet libvirtd; then
+            echo "==> Reiniciando libvirtd..."
+            sudo systemctl restart libvirtd
+        fi
+    else
+        echo "==> firewall_backend já está ativo ou configurado em $TARGET_FILE."
+    fi
+fi
+{{ end -}}

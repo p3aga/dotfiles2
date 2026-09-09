@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# 1. Hashes dos arquivos de origem para acionar execução em alterações
+# 98-custom-extensions.conf: {{ include "gnome/98-custom-extensions.conf" | sha256sum }}
+# 99-custom-settings.conf:   {{ include "gnome/99-custom-settings.conf" | sha256sum }}
+
+SOURCE_DIR="{{ .chezmoi.sourceDir }}/gnome"
+
+echo "==> Copiando configurações dconf do GNOME..."
+sudo install -m 644 -o root -g root "$SOURCE_DIR/98-custom-extensions.conf" /etc/dconf/db/local.d/98-custom-extensions
+sudo install -m 644 -o root -g root "$SOURCE_DIR/99-custom-settings.conf" /etc/dconf/db/local.d/99-custom-settings
+sudo install -m 644 -o root -g root "$SOURCE_DIR/99-custom-settings.conf" /etc/dconf/db/gdm.d/99-custom-settings
+
+echo "==> Resetando configurações e reconstruindo o banco de dados dconf..."
+dconf reset /org/gnome/shell/enabled-extensions || true
+sudo dconf update
+
+echo "==> Configurações do GNOME aplicadas com sucesso!"
