@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+{{ if eq .chezmoi.osRelease.id "fedora" -}}
+set -euo pipefail
+
+echo "==> Gerenciando serviços do systemd..."
+
+# 1. Serviços a serem iniciados e (opcionalmente) habilitados
+{{- if hasKey .services "started" }}
+  {{- range .services.started }}
+    {{- $cmd := "sudo systemctl" }}
+    {{- if and (hasKey . "user") .user }}
+      {{- $cmd = "systemctl --user" }}
+    {{- end }}
+echo "Iniciando {{ .name }} ({{ $cmd }})..."
+{{ $cmd }} start {{ .name }}
+    {{- if .enabled }}
+echo "Habilitando {{ .name }} ({{ $cmd }})..."
+{{ $cmd }} enable {{ .name }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+# 2. Serviços a serem parados e (opcionalmente) desabilitados
+{{- if hasKey .services "stopped" }}
+  {{- range .services.stopped }}
+    {{- $cmd := "sudo systemctl" }}
+    {{- if and (hasKey . "user") .user }}
+      {{- $cmd = "systemctl --user" }}
+    {{- end }}
+echo "Parando {{ .name }} ({{ $cmd }})..."
+{{ $cmd }} stop {{ .name }}
+    {{- if not .enabled }}
+echo "Desabilitando {{ .name }} da inicialização ({{ $cmd }})..."
+{{ $cmd }} disable {{ .name }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+echo "==> Configuração de serviços concluída!"
+{{ end -}}

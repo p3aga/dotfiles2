@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+{{ if eq .chezmoi.osRelease.id "fedora" -}}
+set -euo pipefail
+
+# 1. Gerenciar repositórios COPR
+echo "==> Gerenciando repositórios COPR..."
+{{- if .copr.remove }}
+  {{- range .copr.remove }}
+echo "Desabilitando COPR: {{ . }}"
+sudo dnf copr disable -y {{ . }} || true
+  {{- end }}
+{{- end }}
+
+{{- if .copr.enable }}
+  {{- range .copr.enable }}
+echo "Habilitando COPR: {{ . }}"
+sudo dnf copr enable -y {{ . }}
+  {{- end }}
+{{- end }}
+
+# 2. Remover pacotes DNF indesejados
+{{- if .dnf.remove }}
+echo "==> Removendo pacotes DNF..."
+sudo dnf remove -y \
+  {{- range .dnf.remove }}
+  {{ . }} \
+  {{- end }}
+{{- end }}
+
+# 3. Instalar pacotes via DNF
+{{- if .dnf.install }}
+echo "==> Instalando pacotes via DNF..."
+sudo dnf install -y \
+  {{- range .dnf.install }}
+  {{ . }} \
+  {{- end }}
+{{- end }}
+
+# 4. Configurar Flathub e instalar Flatpaks
+{{- if lookPath "flatpak" }}
+echo "==> Configurando Flatpak e instalando aplicativos..."
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+{{- if .flatpak.install }}
+sudo flatpak install -y flathub \
+  {{- range .flatpak.install }}
+  {{ . }} \
+  {{- end }}
+{{- end }}
+{{- end }}
+
+echo "==> Concluído!"
+{{ end -}}
