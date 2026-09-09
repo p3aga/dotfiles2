@@ -1,0 +1,13 @@
+# Modular zsh config loader.
+#
+# Load order is controlled by numeric prefixes in dot_zshrc.d:
+# 00-*.zsh -> loaded first
+# 99-*.zsh -> loaded last
+
+ZSHRC_D="${HOME}/.zshrc.d"
+
+if [[ -d "$ZSHRC_D" ]]; then
+  for zshrc_fragment in "$ZSHRC_D"/*.zsh(.N); do
+    source "$zshrc_fragment"
+  done
+fi

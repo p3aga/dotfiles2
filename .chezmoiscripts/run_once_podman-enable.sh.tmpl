@@ -1,0 +1,6 @@
+#!/bin/bash
+
+{{ if not (or (stat "/.dockerenv") (stat "/run/.containerenv")) }}
+  echo "Enabling podman.socket for user"
+  systemctl enable --user --now podman.socket
+{{ end }}
