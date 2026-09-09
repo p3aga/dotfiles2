@@ -1,0 +1,8 @@
+[[user]]
+name = "henrick"
+shell = "/bin/zsh"
+groups = wheel,libvirt
+
+[[user]]
+name = "elainne"
+shell = "/bin/zsh"

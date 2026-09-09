@@ -1,0 +1,75 @@
+[copr]
+enable = [
+  "wezfurlong/wezterm-nightly",
+  "lihaohong/yazi",
+  "dejan/lazygit",
+  "jdxcode/mise"
+]
+remove = [
+  "phracek/PyCharm"
+]
+
+[dnf]
+install = [
+  "alacritty",
+  "atuin",
+  "btop",
+  "cascadia-code-nf-fonts",
+  "lazygit",
+  "dnf-plugins-core",
+  "docker-compose",
+  "eza",
+  "fd-find",
+  "fzf",
+  "git-delta",
+  "glow",
+  "gnome-themes-extra",
+  "gnome-tweaks",
+  "htop",
+  "libvirt",
+  "mise",
+  "nodejs",
+  "papirus-icon-theme",
+  "plocate",
+  "python3-neovim",
+  "python3-pip",
+  "ripgrep",
+  "rsms-inter-fonts",
+  "tailscale",
+  "tree-sitter-cli",
+  "vagrant",
+  "vagrant-libvirt",
+  "virt-manager",
+  "wezterm",
+  "wireguard-tools",
+  "yazi",
+  "zoxide",
+  "zsh"
+]
+remove = [
+  "gnome-boxes",
+  "gnome-connections",
+  "gnome-maps",
+  "gnome-tour",
+  "mediawriter",
+  "rhythmbox",
+  "yelp",
+  "ptyxis"
+]
+
+[flatpak]
+install = [
+  "com.anydesk.Anydesk",
+  "com.bitwarden.desktop",
+  "com.discordapp.Discord",
+  "com.spotify.Client",
+  "io.dbeaver.DBeaverCommunity",
+  "io.ente.auth",
+  "io.gitlab.adhami3310.Impression",
+  "org.localsend.localsend_app",
+  "org.mozilla.Thunderbird",
+  "org.onlyoffice.desktopeditors",
+  "org.qbittorrent.qBittorrent",
+  "org.remmina.Remmina",
+  "org.videolan.VLC"
+]

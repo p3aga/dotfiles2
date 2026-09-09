@@ -1,0 +1,20 @@
+[[services.started]]
+name = "tailscaled"
+enabled = true
+
+[[services.started]]
+name = "sshd"
+enabled = true
+
+[[services.started]]
+name = "libvirtd"
+enabled = true
+
+[[services.started]]
+name = "podman.socket"
+enabled = true
+user = true
+
+[[services.stopped]]
+name = "abrtd"
+enabled = false
