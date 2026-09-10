@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+{{ if eq .chezmoi.osRelease.id "fedora" -}}
+set -euo pipefail
+
+POLICY_URL="https://raw.githubusercontent.com/bitwarden/clients/main/apps/desktop/resources/com.bitwarden.desktop.policy"
+POLICY_DIR="/usr/share/polkit-1/actions"
+POLICY_FILE="${POLICY_DIR}/com.bitwarden.Bitwarden.policy"
+SELINUX_CONTEXT="system_u:object_r:usr_t:s0"
+
+echo "==> Configurando política do Polkit para o Bitwarden (biometria)..."
+
+sudo mkdir -p "${POLICY_DIR}"
+
+if command -v wget &>/dev/null; then
+    sudo wget -q -O "${POLICY_FILE}" "${POLICY_URL}"
+else
+    sudo curl -fsSL -o "${POLICY_FILE}" "${POLICY_URL}"
+fi
+
+sudo chown root:root "${POLICY_FILE}"
+sudo chmod 644 "${POLICY_FILE}"
+
+if command -v chcon &>/dev/null; then
+    sudo chcon "${SELINUX_CONTEXT}" "${POLICY_FILE}"
+fi
+
+echo "==> Política de biometria do Bitwarden configurada com sucesso!"
+{{ end -}}
