@@ -18,7 +18,7 @@ sudo dnf install -y --nogpgcheck \
 echo "==> Instalando grupo de pacotes Multimídia..."
 sudo dnf group install -y --setopt=install_weak_deps=False \
     --exclude="PackageKit-gstreamer-plugin" \
-    "Multimedia"
+    multimedia
 
 if rpm -q ffmpeg-free &>/dev/null; then
     echo "==> Substituindo ffmpeg-free pelo ffmpeg completo via swap..."
