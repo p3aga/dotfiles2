@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+{{ if eq .chezmoi.osRelease.id "fedora" -}}
+set -euo pipefail
+
+EXTENSION_UUID="AlphabeticalAppGrid@stuarthayhurst"
+REPO_URL="https://github.com/stuarthayhurst/alphabetical-grid-extension.git"
+GLOBAL_INSTALL_DIR="/usr/share/gnome-shell/extensions/${EXTENSION_UUID}"
+GLOBAL_SCHEMA_DIR="/usr/share/glib-2.0/schemas"
+
+echo "==> Verificando extensão GNOME para todos os usuários: ${EXTENSION_UUID}..."
+
+if [ ! -d "${GLOBAL_INSTALL_DIR}" ]; then
+    echo "==> Clonando repositório e instalando globalmente..."
+    BUILD_DIR=$(mktemp -d)
+    trap 'rm -rf "${BUILD_DIR}"' EXIT
+
+    git clone --depth 1 "${REPO_URL}" "${BUILD_DIR}"
+
+    sudo mkdir -p "${GLOBAL_INSTALL_DIR}"
+    sudo cp -r "${BUILD_DIR}/"* "${GLOBAL_INSTALL_DIR}/"
+    sudo chmod -R 755 "${GLOBAL_INSTALL_DIR}"
+
+    if [ -d "${GLOBAL_INSTALL_DIR}/schemas" ]; then
+        sudo glib-compile-schemas "${GLOBAL_INSTALL_DIR}/schemas"
+
+        for schema in "${GLOBAL_INSTALL_DIR}/schemas/"*.gschema.xml; do
+            if [ -f "${schema}" ]; then
+                sudo cp "${schema}" "${GLOBAL_SCHEMA_DIR}/"
+            fi
+        done
+        sudo glib-compile-schemas "${GLOBAL_SCHEMA_DIR}"
+    fi
+
+    echo "==> Extensão instalada globalmente em ${GLOBAL_INSTALL_DIR}."
+else
+    echo "==> A extensão já está presente em ${GLOBAL_INSTALL_DIR}."
+fi
+
+echo "==> Concluído!"
+{{ end -}}
