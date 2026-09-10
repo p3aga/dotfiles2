@@ -68,6 +68,7 @@ install = [
   "com.discordapp.Discord",
   "com.mattjakeman.ExtensionManager",
   "com.spotify.Client",
+  "dev.zed.Zed",
   "io.dbeaver.DBeaverCommunity",
   "io.ente.auth",
   "io.gitlab.adhami3310.Impression",
