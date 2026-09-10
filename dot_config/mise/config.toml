@@ -1,6 +1,7 @@
 [tools]
 herdr = "latest"
 uv = "latest"
+"npm:neovim" = "latest"
 
 [settings.ruby]
 compile = false
