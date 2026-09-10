@@ -5,22 +5,26 @@ set -euo pipefail
 
 EXTENSION_UUID="AlphabeticalAppGrid@stuarthayhurst"
 REPO_URL="https://github.com/stuarthayhurst/alphabetical-grid-extension.git"
+EXTENSION_TAG="v46.0-1"
 GLOBAL_INSTALL_DIR="/usr/share/gnome-shell/extensions/${EXTENSION_UUID}"
 GLOBAL_SCHEMA_DIR="/usr/share/glib-2.0/schemas"
 
 echo "==> Verificando extensão GNOME para todos os usuários: ${EXTENSION_UUID}..."
 
 if [ ! -d "${GLOBAL_INSTALL_DIR}" ]; then
-    echo "==> Clonando repositório e instalando globalmente..."
+    echo "==> Clonando repositório (tag ${EXTENSION_TAG}) e instalando globalmente..."
     BUILD_DIR=$(mktemp -d)
     trap 'rm -rf "${BUILD_DIR}"' EXIT
 
-    git clone --depth 1 "${REPO_URL}" "${BUILD_DIR}"
+    # 1. Clona diretamente na tag especificada
+    git clone --depth 1 --branch "${EXTENSION_TAG}" "${REPO_URL}" "${BUILD_DIR}"
 
+    # 2. Copia apenas o conteúdo do subdiretório 'extension'
     sudo mkdir -p "${GLOBAL_INSTALL_DIR}"
-    sudo cp -r "${BUILD_DIR}/"* "${GLOBAL_INSTALL_DIR}/"
+    sudo cp -r "${BUILD_DIR}/extension/"* "${GLOBAL_INSTALL_DIR}/"
     sudo chmod -R 755 "${GLOBAL_INSTALL_DIR}"
 
+    # 3. Compilação e distribuição dos schemas GSettings
     if [ -d "${GLOBAL_INSTALL_DIR}/schemas" ]; then
         sudo glib-compile-schemas "${GLOBAL_INSTALL_DIR}/schemas"
 
