@@ -1,2 +1,6 @@
+[tools]
+herdr = "latest"
+uv = "latest"
+
 [settings.ruby]
 compile = false
