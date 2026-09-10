@@ -1,0 +1,15 @@
+progress = true
+sourceDir = "~/.dotfiles"
+
+[diff]
+command = "delta"
+
+[edit]
+command = "nvim"
+
+[git]
+autoPush = true
+
+[merge]
+command = "nvim"
+args = ["-d", "{{ .Destination }}", "{{ .Source }}", "{{ .Target }}"]
