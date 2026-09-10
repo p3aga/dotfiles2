@@ -23,7 +23,6 @@ install = [
   "fzf",
   "git-delta",
   "glow",
-  "gnome-themes-extra",
   "gnome-tweaks",
   "htop",
   "intel-media-driver",
