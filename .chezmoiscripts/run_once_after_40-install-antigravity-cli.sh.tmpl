@@ -8,6 +8,7 @@ echo "==> Verificando a instalação do antigravity-cli..."
 if ! command -v agy &>/dev/null && [ ! -f "${HOME}/.local/bin/agy" ]; then
     echo "==> Instalando antigravity-cli..."
     curl -fsSL https://antigravity.google/cli/install.sh | bash
+    chezmoi apply --force "${HOME}/.zshrc"
     echo "==> antigravity-cli instalado com sucesso!"
 else
     echo "==> antigravity-cli já está instalado."
