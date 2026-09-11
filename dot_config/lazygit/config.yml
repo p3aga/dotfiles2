@@ -31,6 +31,7 @@ gui:
       - '#cdd6f4'
   authorColors:
     '*': '#b4befe'
+
 git:
   diffRenderers:
     - command: delta --dark --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
