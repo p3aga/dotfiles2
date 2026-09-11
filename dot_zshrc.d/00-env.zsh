@@ -13,3 +13,5 @@ fi
 export GOPATH=$HOME/.go
 
 export SSH_AUTH_SOCK=/home/$USER/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock
+
+export PATH=$HOME/.local/bin:$PATH
