@@ -1,4 +1,5 @@
 progress = true
+encryption = "gpg"
 
 [diff]
 command = "delta"
@@ -12,3 +13,6 @@ autoPush = true
 [merge]
 command = "nvim"
 args = ["-d", '{{ "{{ .Destination }}" }}', '{{ "{{ .Source }}" }}', '{{ "{{ .Target }}" }}']
+
+[gpg]
+symmetric = true
